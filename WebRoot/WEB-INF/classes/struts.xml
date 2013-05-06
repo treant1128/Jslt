@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+
+	<!-- 加载默认的struts2配置文件 -->
+	<include file="struts-default.xml"></include>
+	<constant name="struts.i18n.encoding" value="GBK"></constant>
+	<constant name="struts.ognl.allowStaticMethodAccess" value="true"></constant>
+
+	<!-- 继承默认的struts2配置文件 -->
+	<package name="default" namespace="/" extends="struts-default">
+	
+		<!-- 定义名为checkLogin的拦截器 -->
+		<interceptors>
+			<!-- 定义权限检查拦截器 -->
+			<interceptor name="checkLogin" class="com.wukong.jslt.utils.CheckLoginInterceptor"></interceptor>
+			<!-- 定义一个包含权限检查的拦截器 -->
+			<interceptor-stack name="myDefaultStack">
+				<!-- 定义拦截器栈包含checkLogin -->
+				<interceptor-ref name="checkLogin"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+
+		<!-- 设置全局默认Interceptor -->
+		<default-interceptor-ref name="myDefaultStack">	</default-interceptor-ref>
+		
+		<!-- 定义全局Result -->
+		<global-results>
+			<result name="login">/signin.html</result>
+		</global-results>
+	
+		<!-- Action默认执行public String execute() -->
+		<action name="loginAction" class="com.wukong.jslt.action.LoginAction">
+			<result name="JSLTSuccess">/index.jsp</result>
+			<result name="FooSuccess">/fooIndex.jsp</result>
+			<result name="LoginFailture">/login_failture.jsp</result>
+			
+			<!-- Interceptor 一般配置在Result之后 -->
+			<interceptor-ref name="myDefaultStack"></interceptor-ref>
+		</action>
+		
+		<action name="fooAction" class="com.wukong.jslt.action.FooAction">
+			<result name="success">/submitSuccess.jsp</result>
+			
+			<interceptor-ref name="myDefaultStack"></interceptor-ref>
+		</action>
+		
+		<action name="auditAction" class="com.wukong.jslt.action.AuditAction">
+			<result name="success">/index2.jsp</result>
+			<result name="modifyProcessStatus">/fooIndex2.jsp</result>
+			
+			<interceptor-ref name="myDefaultStack"></interceptor-ref>
+		</action>
+		
+		<action name="auditAction2" class="com.wukong.jslt.action.AuditAction2">
+			<result name="success">/index.jsp</result>
+			<result name="modifyProcessStatus">/fooIndex.jsp</result>
+			
+			<interceptor-ref name="myDefaultStack"></interceptor-ref>
+		</action>
+		
+		<action name="userAction" class="com.wukong.jslt.action.UserAction">
+			<result name="success">/changePwd.html</result>
+			
+			<interceptor-ref name="myDefaultStack"></interceptor-ref>
+		</action>
+	</package>
+</struts>    
